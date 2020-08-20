@@ -1,12 +1,28 @@
 import React from "react";
 import Joi from "joi-browser";
-import Form from "../components/common/Form";
+import Forms from "../components/common/Form";
 import { getUser, saveUser } from "../services/Users/usersService";
 
-import { Container, Row, Col, Card, CardHeader, CardBody } from "shards-react";
+import {
+  Container,
+  Card,
+  CardBody,
+  CardHeader,
+  CardFooter,
+  ListGroup,
+  ListGroupItem,
+  Row,
+  Col,
+  Form,
+  FormGroup,
+  FormInput,
+  FormSelect,
+  FormTextarea,
+  Button
+} from "shards-react";
 import PageTitle from "../components/common/PageTitle";
 
-class UserForm extends Form {
+class UserForm extends Forms {
   state = {
     data: { email: "", password: "", name: "", lastname: "", createdAt: "" },
     errors: {}
@@ -83,23 +99,43 @@ class UserForm extends Form {
               <CardHeader className="border-bottom">
                 <h6 className="m-0">Create User</h6>
               </CardHeader>
-              <CardBody className="p-3 pb-3">
-                <div className="form-input">
-                  <form onSubmit={this.handleSubmit}>
+              <ListGroup flush>
+                <ListGroupItem className="p-3">
+                  <Row>
                     <Col>
-                      <label for="">First Name</label>
-                      {this.renderInput("name", "Name")}
-                      <label for="">Last Name</label>
-                      {this.renderInput("lastname", "Lastname")}
-                      <label for="">Email</label>
-                      {this.renderInput("email", "Email")}
-                      <label for="">Password</label>
-                      {this.renderInput("password", "Password", "password")}
-                      {this.renderButton("Save")}
+                      <Form>
+                        <form onSubmit={this.handleSubmit}>
+                          <Row>
+                            <Col md="6" className="form-group">
+                              <label for="">First Name</label>
+                              {this.renderInput("name", "Name")}
+                            </Col>
+                            <Col md="6">
+                              <label for="">Last Name</label>
+                              {this.renderInput("", "lastname")}
+                            </Col>
+
+                            <Col md="6" className="form-group">
+                              <label for="">Email</label>
+                              {this.renderInput("email", "Email", "email")}
+                            </Col>
+
+                            <Col md="6">
+                              <label for="">Password</label>
+                              {this.renderInput(
+                                "password",
+                                "Password",
+                                "password"
+                              )}
+                            </Col>
+                          </Row>
+                        </form>
+                      </Form>
                     </Col>
-                  </form>
-                </div>
-              </CardBody>
+                  </Row>
+                </ListGroupItem>
+              </ListGroup>
+              <CardFooter> {this.renderButton("Save")}</CardFooter>
             </Card>
           </Col>
         </Row>

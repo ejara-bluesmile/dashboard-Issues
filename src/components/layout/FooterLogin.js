@@ -2,9 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Container, Row, Nav, NavItem, NavLink } from "shards-react";
 import { Link } from "react-router-dom";
+import "./footerLogin.css";
 
-const MainFooter = ({ contained, menuItems, copyright }) => (
-  <footer className="main-footer d-flex p-2 px-3 bg-white border-top">
+const footerLogin = ({ contained, menuItems, copyright }) => (
+  <footer className="main-footer footer-login d-flex p-2 px-3 bg-white border-top">
     <Container fluid={contained}>
       <Row>
         <Nav>
@@ -22,7 +23,7 @@ const MainFooter = ({ contained, menuItems, copyright }) => (
   </footer>
 );
 
-MainFooter.propTypes = {
+footerLogin.propTypes = {
   /**
    * Whether the content is contained, or not.
    */
@@ -37,7 +38,7 @@ MainFooter.propTypes = {
   copyright: PropTypes.string
 };
 
-MainFooter.defaultProps = {
+footerLogin.defaultProps = {
   contained: false,
   copyright: "Copyright © 2020",
   menuItems: [
@@ -64,4 +65,4 @@ MainFooter.defaultProps = {
   ]
 };
 
-export default MainFooter;
+export default footerLogin;

@@ -1,14 +1,31 @@
 import React from "react";
 import Joi from "joi-browser";
-import Form from "../components/common/Form";
+import Forms from "../components/common/Form";
 import * as userService from "../services/registerService";
 import * as auth from "../services/authService";
 import Swal from "sweetalert2";
+import iconBlue from "../images/bluesmile.png";
 
-import { Container, Row, Col, Card, CardHeader, CardBody } from "shards-react";
+import {
+  Container,
+  Card,
+  CardBody,
+  CardHeader,
+  CardFooter,
+  ListGroup,
+  ListGroupItem,
+  Row,
+  Col,
+  Form,
+  FormGroup,
+  FormInput,
+  FormSelect,
+  FormTextarea,
+  Button
+} from "shards-react";
 import PageTitle from "../components/common/PageTitle";
 
-class RegisterForm extends Form {
+class RegisterForm extends Forms {
   state = {
     data: {
       email: "",
@@ -68,36 +85,56 @@ class RegisterForm extends Form {
     return (
       <Container fluid className="main-content-container px-4">
         {/* Page Header */}
-        <Row noGutters className="page-header py-4">
-          <PageTitle
-            sm="4"
-            title="Register"
-            subtitle="Bluesmile"
-            className="text-sm-left"
-          />
-        </Row>
+        <br />
+        <a href="/login">
+          <h3 className="text-center">BlueSprints App</h3>
+        </a>
+
+        <div className="text-center">
+          <img className="" src={iconBlue} alt="iconblue" width="110" />
+        </div>
         {/* Default Light Table */}
         <Row>
-          <Col>
-            <Card small className="mb-4">
+          <Col md="6 offset-3">
+            <Card small className="mb-6">
               <CardHeader className="border-bottom">
                 <h6 className="m-0">Register</h6>
               </CardHeader>
-              <CardBody className="p-3 pb-3">
-                <Col>
-                  <form onSubmit={this.handleSubmit}>
-                    <label for="">First Name</label>
-                    {this.renderInput("name", "Name")}
-                    <label for="">Last Name</label>
-                    {this.renderInput("lastname", "Lastname")}
-                    <label for="">Email</label>
-                    {this.renderInput("email", "Email")}
-                    <label for="">Password</label>
-                    {this.renderInput("password", "Password", "password")}
-                    {this.renderButton("Register")}
-                  </form>
-                </Col>
-              </CardBody>
+              <ListGroup flush>
+                <ListGroupItem className="p-3">
+                  <Row>
+                    <Col>
+                      <Form>
+                        <form onSubmit={this.handleSubmit}>
+                          <Row>
+                            <Col md="6">
+                              <label for="">First Name</label>
+                              {this.renderInput("name", "")}
+                            </Col>
+                            <Col md="6">
+                              <label for="">Last Name</label>
+                              {this.renderInput("lastname", "Lastname")}
+                            </Col>
+                            <Col md="6">
+                              <label for="">Email</label>
+                              {this.renderInput("email", "Email")}
+                            </Col>
+                            <Col md="6">
+                              <label for="">Password</label>
+                              {this.renderInput(
+                                "password",
+                                "Password",
+                                "password"
+                              )}
+                            </Col>
+                          </Row>
+                          <div>{this.renderButton("Register")}</div>
+                        </form>
+                      </Form>
+                    </Col>
+                  </Row>
+                </ListGroupItem>
+              </ListGroup>
             </Card>
           </Col>
         </Row>

@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 // Layout Types
-import { DefaultLayout } from "./layouts";
+import { DefaultLayout, LoginLayout } from "./layouts";
 
 // Route Views
 import Login from "./views/Login";
@@ -22,12 +22,12 @@ export default [
     path: "/",
     exact: true,
     layout: DefaultLayout,
-    component: () => <Redirect to="/blog-overview" />
+    component: () => <Redirect to="/login" />
   },
   {
     path: "/login",
     exact: true,
-    layout: DefaultLayout,
+    layout: LoginLayout,
     component: Login
   },
   {
@@ -38,12 +38,14 @@ export default [
   },
   {
     path: "/users/:id",
+    exact: true,
     layout: DefaultLayout,
     component: UserForm
   },
   {
     path: "/register",
-    layout: DefaultLayout,
+    exact: true,
+    layout: LoginLayout,
     component: Register
   },
   {
