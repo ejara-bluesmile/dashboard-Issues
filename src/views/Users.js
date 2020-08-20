@@ -145,13 +145,15 @@ class Users extends Component {
                   onDelete={this.handleDelete}
                   onSort={this.handleSort}
                 />
-                <Pagination
-                  itemsCount={totalCount}
-                  pageSize={pageSize}
-                  currentPage={currentPage}
-                  onPageChange={this.handlePageChange}
-                  className="pagination text-center"
-                />
+                <div className="m-3">
+                  <Pagination
+                    itemsCount={totalCount}
+                    pageSize={pageSize}
+                    currentPage={currentPage}
+                    onPageChange={this.handlePageChange}
+                    className="pagination"
+                  />
+                </div>
 
                 {/* {user && ( */}
               </CardBody>
