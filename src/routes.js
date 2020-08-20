@@ -5,7 +5,10 @@ import { Redirect } from "react-router-dom";
 import { DefaultLayout } from "./layouts";
 
 // Route Views
+import Login from "./views/Login";
 import Users from "./views/Users";
+import Register from "./views/Register";
+import UserForm from "./views/UserForm";
 import BlogOverview from "./views/BlogOverview";
 import UserProfileLite from "./views/UserProfileLite";
 import AddNewPost from "./views/AddNewPost";
@@ -22,9 +25,26 @@ export default [
     component: () => <Redirect to="/blog-overview" />
   },
   {
+    path: "/login",
+    exact: true,
+    layout: DefaultLayout,
+    component: Login
+  },
+  {
     path: "/users",
+    exact: true,
     layout: DefaultLayout,
     component: Users
+  },
+  {
+    path: "/users/:id",
+    layout: DefaultLayout,
+    component: UserForm
+  },
+  {
+    path: "/register",
+    layout: DefaultLayout,
+    component: Register
   },
   {
     path: "/blog-overview",

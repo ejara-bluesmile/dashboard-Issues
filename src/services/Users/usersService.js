@@ -1,4 +1,4 @@
-import http from "./httpService";
+import http from "../httpService";
 // import { apiUrl } from "../config.json";
 import Swal from "sweetalert2";
 
