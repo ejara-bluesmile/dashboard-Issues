@@ -8,7 +8,15 @@ import { paginate } from "../utils/paginate";
 import _ from "lodash";
 import SearchBox from "../components/common/SearchBox";
 
-import { Container, Row, Col, Card, CardHeader, CardBody } from "shards-react";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter
+} from "shards-react";
 import PageTitle from "../components/common/PageTitle";
 
 // import Sidebar from "../sideBar";
@@ -126,10 +134,10 @@ class Users extends Component {
           <Col>
             <Card small className="mb-4">
               <CardHeader className="border-bottom">
-                <h6 className="m-0">Users Details</h6>
-              </CardHeader>
-              <CardBody className="p-3 pb-3">
+                <h6 className="m-0">Search User</h6>
                 <SearchBox value={searchQuery} onChange={this.handleSearch} />
+              </CardHeader>
+              <CardBody className="p-0 pb-3">
                 <UsersTable
                   users={users}
                   sortColumn={sortColumn}
@@ -142,20 +150,22 @@ class Users extends Component {
                   pageSize={pageSize}
                   currentPage={currentPage}
                   onPageChange={this.handlePageChange}
-                  className="pagination"
+                  className="pagination text-center"
                 />
-                <p>{totalCount} users</p>
 
                 {/* {user && ( */}
+              </CardBody>
+              <CardFooter>
+                <p>{totalCount} users</p>
                 <Link
                   to="/users/new"
-                  className="btn btn-accent"
+                  className="btn btn-primary text-center"
                   id="btn-newuser"
                   // style={{ marginBottom: 20 }}
                 >
                   New User
                 </Link>
-              </CardBody>
+              </CardFooter>
             </Card>
           </Col>
         </Row>

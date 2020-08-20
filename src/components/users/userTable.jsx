@@ -13,20 +13,21 @@ class UsersTable extends Component {
     },
     { path: "name", label: "Name" },
     {
-      label: "Action",
+      label: "Edit",
       key: "edit",
       content: user => (
         <Link to={`/users/${user.id}`}>
-          <button className="btn btn-info btn-sm btn-pill">Edit</button>
+          <button className="btn btn-info btn-sm">Edit</button>
         </Link>
       )
     },
     {
+      label: "Delete",
       key: "delete",
       content: user => (
         <button
           onClick={() => this.props.onDelete(user)}
-          className="btn btn-danger btn-sm btn-pill"
+          className="btn btn-warning btn-sm "
         >
           Delete
         </button>

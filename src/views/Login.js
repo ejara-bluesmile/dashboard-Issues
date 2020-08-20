@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 // import "./common/common.css";
 import { login } from "../services/authService";
 import Swal from "sweetalert2";
+import iconBlue from "../images/bluesmile.png";
 
 import { Container, Row, Col, Card, CardHeader, CardBody } from "shards-react";
 import PageTitle from "../components/common/PageTitle";
@@ -63,18 +64,21 @@ class LoginForm extends Form {
     return (
       <Container fluid className="main-content-container px-4">
         {/* Page Header */}
-        <Row noGutters className="page-header py-4">
-          <PageTitle
-            sm="4"
-            title="Login"
-            subtitle="Bluesmile"
-            className="text-sm-left"
-          />
-        </Row>
+        {/* <div className="mb-3 mx-auto">
+          <img className="" src={iconBlue} alt="iconblue" width="110" />
+        </div> */}
+        <br />
+        <a href="/login">
+          <h3 className="text-center">BlueSprints App</h3>
+        </a>
+
+        <div className="text-center">
+          <img className="" src={iconBlue} alt="iconblue" width="110" />
+        </div>
         {/* Default Light Table */}
         <Row>
-          <Col>
-            <Card small className="mb-4">
+          <Col md="6 offset-3">
+            <Card small className="mb-5">
               <CardHeader className="border-bottom">
                 <h6 className="m-0">Login</h6>
               </CardHeader>
@@ -87,7 +91,7 @@ class LoginForm extends Form {
                           <label for="">Email</label>
                           {this.renderInput("email", "Email")}
                           <label for="">Password</label>
-                          {this.renderInput("password", "Password", "password")}
+                          {this.renderInput("password", "password", "password")}
                           {this.renderButton("Login")}
                         </form>
                       </div>

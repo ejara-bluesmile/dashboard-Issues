@@ -23,10 +23,10 @@ const UserDetails = ({ userDetails }) => (
       <h4 className="mb-0">{userDetails.name}</h4>
       <span className="text-muted d-block mb-2">{userDetails.jobTitle}</span>
       <Button pill outline size="sm" className="mb-2">
-        <i className="material-icons mr-1">accessibility</i> Follow
+        <i className="material-icons mr-1">person_add</i> Follow
       </Button>
     </CardHeader>
-    {/* <ListGroup flush>
+    <ListGroup flush>
       <ListGroupItem className="px-4">
         <div className="progress-wrapper">
           <strong className="text-muted d-block mb-2">
@@ -48,7 +48,7 @@ const UserDetails = ({ userDetails }) => (
         </strong>
         <span>{userDetails.metaValue}</span>
       </ListGroupItem>
-    </ListGroup> */}
+    </ListGroup>
   </Card>
 );
 

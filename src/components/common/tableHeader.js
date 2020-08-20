@@ -21,17 +21,18 @@ class TableHeader extends Component {
 
     if (column.path !== sortColumn.path) return null;
     if (sortColumn.order === "asc")
-      return <i className="material-icons">south</i>;
-    return <i className="material-icons">north</i>;
+      return <i className="material-icons">arrow_drop_down</i>;
+    return <i className="material-icons">arrow_drop_up</i>;
   };
 
   render() {
     return (
-      <thead>
+      <thead className="bg-light">
         <tr>
           {this.props.columns.map(column => (
             <th
-              className="clickable"
+              className="clickable border-0"
+              scope="col"
               key={column.path || column.key}
               onClick={() => this.raiseSort(column.path)}
             >

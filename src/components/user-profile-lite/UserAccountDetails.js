@@ -73,7 +73,7 @@ const UserAccountDetails = ({ title }) => (
                   />
                 </Col>
               </Row>
-              {/* <FormGroup>
+              <FormGroup>
                 <label htmlFor="feAddress">Address</label>
                 <FormInput
                   id="feAddress"
@@ -81,8 +81,9 @@ const UserAccountDetails = ({ title }) => (
                   value="1234 Main St."
                   onChange={() => {}}
                 />
-              </FormGroup> */}
-              {/* <Row form>
+              </FormGroup>
+              <Row form>
+                {/* City */}
                 <Col md="6" className="form-group">
                   <label htmlFor="feCity">City</label>
                   <FormInput
@@ -91,6 +92,7 @@ const UserAccountDetails = ({ title }) => (
                     onChange={() => {}}
                   />
                 </Col>
+                {/* State */}
                 <Col md="4" className="form-group">
                   <label htmlFor="feInputState">State</label>
                   <FormSelect id="feInputState">
@@ -98,6 +100,7 @@ const UserAccountDetails = ({ title }) => (
                     <option>...</option>
                   </FormSelect>
                 </Col>
+                {/* Zip Code */}
                 <Col md="2" className="form-group">
                   <label htmlFor="feZipCode">Zip</label>
                   <FormInput
@@ -107,12 +110,13 @@ const UserAccountDetails = ({ title }) => (
                   />
                 </Col>
               </Row>
-              <Row form> */}
-              {/* <Col md="12" className="form-group">
+              <Row form>
+                {/* Description */}
+                <Col md="12" className="form-group">
                   <label htmlFor="feDescription">Description</label>
                   <FormTextarea id="feDescription" rows="5" />
                 </Col>
-              </Row> */}
+              </Row>
               <Button theme="accent">Update Account</Button>
             </Form>
           </Col>
