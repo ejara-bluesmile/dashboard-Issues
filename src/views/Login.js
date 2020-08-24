@@ -41,8 +41,8 @@ class LoginForm extends Form {
         showConfirmButton: false,
         timer: 1500
       });
-
-      window.location = "/users";
+      console.log(response);
+      // window.location = "/users";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };

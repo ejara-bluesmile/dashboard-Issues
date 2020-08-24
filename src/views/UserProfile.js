@@ -2,6 +2,7 @@ import React from "react";
 import Joi from "joi-browser";
 import Forms from "../components/common/Form";
 import { getUser, saveUser } from "../services/Users/usersService";
+import avatar from "../images/user-profile/team-thumb-1.png";
 
 import {
   Container,
@@ -22,9 +23,15 @@ import {
 } from "shards-react";
 import PageTitle from "../components/common/PageTitle";
 
-class UserForm extends Forms {
+class UserProfile extends Forms {
   state = {
-    data: { email: "", password: "", name: "", lastname: "", createdAt: "" },
+    data: {
+      email: "",
+      password: "",
+      name: "",
+      lastname: "",
+      createdAt: ""
+    },
     errors: {}
   };
 
@@ -49,6 +56,7 @@ class UserForm extends Forms {
 
   async populateUser() {
     try {
+      // const userId = 31;
       const userId = this.props.match.params.id;
       if (userId === "new") return;
 
@@ -87,14 +95,31 @@ class UserForm extends Forms {
         <Row noGutters className="page-header py-4">
           <PageTitle
             sm="4"
-            title="Edit"
+            title="User Profile"
             subtitle="User Management"
             className="text-sm-left"
           />
         </Row>
         {/* Default Light Table */}
+
         <Row>
-          <Col>
+          <Col lg="4" className="mb-4 pt-3">
+            <Card className="border-bottom text-center">
+              <div className="mb-3 mx-auto">
+                <img
+                  className="rounded-circle"
+                  src={avatar}
+                  alt="{userDetails.name}"
+                  width="110"
+                />
+              </div>
+              <h4 className="mb-0">userDetails.name</h4>
+              <span className="text-muted d-block mb-2">
+                userDetails.jobTitle
+              </span>
+            </Card>
+          </Col>
+          <Col lg="8" className="mb-4 pt-3">
             <Card small className="mb-4">
               <CardHeader className="border-bottom">
                 <h6 className="m-0">Create User</h6>
@@ -144,4 +169,4 @@ class UserForm extends Forms {
   }
 }
 
-export default UserForm;
+export default UserProfile;
