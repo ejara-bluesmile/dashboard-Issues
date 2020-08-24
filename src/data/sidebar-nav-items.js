@@ -12,11 +12,23 @@ export default function() {
       htmlBefore: '<i class="material-icons">perm_identity</i>',
       htmlAfter: ""
     },
-    // {
-    //   title: "Blog Posts",
-    //   htmlBefore: '<i class="material-icons">vertical_split</i>',
-    //   to: "/blog-posts"
-    // },
+    {
+      title: "BackLogs",
+      htmlBefore: '<i class="material-icons">table_chart</i>',
+      to: "/backlogs"
+    },
+    ,
+    {
+      title: "Features",
+      htmlBefore: '<i class="material-icons">view_module</i>',
+      to: "/features"
+    },
+    ,
+    {
+      title: "Issues",
+      htmlBefore: '<i class="material-icons">vertical_split</i>',
+      to: "/issues"
+    },
     // {
     //   title: "Add New Post",
     //   htmlBefore: '<i class="material-icons">note_add</i>',

@@ -16,6 +16,12 @@ import Errors from "./views/Errors";
 import ComponentsOverview from "./views/ComponentsOverview";
 import Tables from "./views/Tables";
 import BlogPosts from "./views/BlogPosts";
+import BackLog from "./views/BackLog";
+import BackLogForm from "./views/BackLogForm";
+import FeaturesForm from "./views/FeaturesForm";
+import IssuesForm from "./views/IssuesForm";
+import Issues from "./views/Issues";
+import Features from "./views/Features";
 
 export default [
   {
@@ -82,5 +88,36 @@ export default [
     path: "/blog-posts",
     layout: DefaultLayout,
     component: BlogPosts
+  },
+  {
+    path: "/backLogs",
+    layout: DefaultLayout,
+    component: BackLog
+  },
+  {
+    path: "/backlogsForm/:id",
+    layout: DefaultLayout,
+    component: BackLogForm
   }
+  ,
+  {
+    path: "/featuresForm/:id",
+    layout: DefaultLayout,
+    component: FeaturesForm
+  },
+  {
+    path: "/issuesForm/:id",
+    layout: DefaultLayout,
+    component: IssuesForm
+  },
+  {
+    path: "/issues",
+    layout: DefaultLayout,
+    component: Issues
+  },
+  {
+    path: "/features",
+    layout: DefaultLayout,
+    component: Features
+  },
 ];
