@@ -10,18 +10,23 @@ import Users from "./views/Users";
 import Register from "./views/Register";
 import UserForm from "./views/UserForm";
 import BlogOverview from "./views/BlogOverview";
+import UserProfile from "./views/UserProfile";
 import UserProfileLite from "./views/UserProfileLite";
 import AddNewPost from "./views/AddNewPost";
 import Errors from "./views/Errors";
 import ComponentsOverview from "./views/ComponentsOverview";
 import Tables from "./views/Tables";
 import BlogPosts from "./views/BlogPosts";
+
+import Logout from "./components/logout";
+
 import BackLog from "./views/BackLog";
 import BackLogForm from "./views/BackLogForm";
 import FeaturesForm from "./views/FeaturesForm";
 import IssuesForm from "./views/IssuesForm";
 import Issues from "./views/Issues";
 import Features from "./views/Features";
+
 
 export default [
   {
@@ -53,6 +58,18 @@ export default [
     exact: true,
     layout: LoginLayout,
     component: Register
+  },
+  {
+    path: "/logout",
+    exact: true,
+    layout: LoginLayout,
+    component: Logout
+  },
+  {
+    path: "/userprofile",
+    exact: true,
+    layout: DefaultLayout,
+    component: UserProfile
   },
   {
     path: "/blog-overview",
