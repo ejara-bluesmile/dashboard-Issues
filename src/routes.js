@@ -27,7 +27,6 @@ import IssuesForm from "./views/IssuesForm";
 import Issues from "./views/Issues";
 import Features from "./views/Features";
 
-
 export default [
   {
     path: "/",
@@ -112,11 +111,10 @@ export default [
     component: BackLog
   },
   {
-    path: "/backlogsForm/:id",
+    path: "/backlogs/:id",
     layout: DefaultLayout,
     component: BackLogForm
-  }
-  ,
+  },
   {
     path: "/featuresForm/:id",
     layout: DefaultLayout,
@@ -136,5 +134,5 @@ export default [
     path: "/features",
     layout: DefaultLayout,
     component: Features
-  },
+  }
 ];

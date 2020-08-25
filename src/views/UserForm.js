@@ -110,7 +110,7 @@ class UserForm extends Forms {
                               <label for="">First Name</label>
                               {this.renderInput("name", "Name")}
                             </Col>
-                            <Col md="6">
+                            <Col md="6" className="form-group">
                               <label for="">Last Name</label>
                               {this.renderInput("lastname", "lastname")}
                             </Col>
@@ -120,7 +120,7 @@ class UserForm extends Forms {
                               {this.renderInput("email", "Email", "email")}
                             </Col>
 
-                            <Col md="6">
+                            <Col md="6" className="form-group">
                               <label for="">Password</label>
                               {this.renderInput(
                                 "password",
