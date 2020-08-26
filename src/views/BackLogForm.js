@@ -95,14 +95,14 @@ class BackLogForm extends Forms {
       client: backlog.client,
       features: backlog.features,
       createdBy: backlog.createdBy,
-      createdAt: backlog.createdAt,
+      // createdAt: backlog.createdAt,
       status: backlog.status,
       operation: backlog.operation
     };
   }
 
   doSubmit = async () => {
-    console.log("state", this.state.data);
+    // console.log("state", this.state.data);
 
     await saveBacklog(this.state.data);
 
