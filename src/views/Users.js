@@ -18,11 +18,6 @@ import {
   CardFooter
 } from "shards-react";
 import PageTitle from "../components/common/PageTitle";
-
-// import Sidebar from "../sideBar";
-// import "../common/common.css";
-// import iconCompany from "../../resource/bluesmile.png";
-// import ImgIcon from "../../resource/user.png";
 import Swal from "sweetalert2";
 
 class Users extends Component {

@@ -6,58 +6,63 @@ import {
   Card,
   CardHeader,
   CardBody,
+  CardFooter,
   Button
 } from "shards-react";
 import { Link } from "react-router-dom";
 
 import { toast } from "react-toastify";
-import UsersTable from "../components/users/userTable";
 import Pagination from "../components/common/pagination";
-import { getUsers, deleteUser } from "../services/Users/usersService";
+import {
+  getBacklogs,
+  deleteBacklog
+} from "../services/Backlog/backlogsService";
+import BacklogTable from "../components/backlogTable.jsx";
 import { paginate } from "../utils/paginate";
 import _ from "lodash";
 import SearchBox from "../components/common/SearchBox";
 import PageTitle from "../components/common/PageTitle";
-import Editor from "../components/add-new-post/Editor";
-import SidebarActions from "../components/add-new-post/SidebarActions";
-import SidebarCategories from "../components/add-new-post/SidebarCategories";
-import CompleteFormExample from "../components/components-overview/CompleteFormExample";
+// import Editor from "../components/add-new-post/Editor";
+// import SidebarActions from "../components/add-new-post/SidebarActions";
+// import SidebarCategories from "../components/add-new-post/SidebarCategories";
+// import CompleteFormExample from "../components/components-overview/CompleteFormExample";
 import Swal from "sweetalert2";
 
 class BackLog extends React.Component {
-  states = [
-    {
-      title: 0,
-      project: "Reportado"
-    },
-    {
-      title: 1,
-      project: "En progreso"
-    },
-    {
-      title: 2,
-      project: "Resuelto"
-    },
-    {
-      title: 3,
-      project: "Eliminado"
-    }
-  ];
+  // states = [
+  //   {
+  //     title: 0,
+  //     project: "Reportado"
+  //   },
+  //   {
+  //     title: 1,
+  //     project: "En progreso"
+  //   },
+  //   {
+  //     title: 2,
+  //     project: "Resuelto"
+  //   },
+  //   {
+  //     title: 3,
+  //     project: "Eliminado"
+  //   }
+  // ];
   state = {
-    users: [],
+    backlogs: [],
     currentPage: 1,
     pageSize: 4,
     searchQuery: "",
-    sortColumn: { path: "email", order: "asc" },
-    user: {}
+    sortColumn: { path: "title", order: "asc" },
+    backlog: {}
   };
 
   async componentDidMount() {
-    const { data: users } = await getUsers();
-    this.setState({ users });
+    const { data: backlogs } = await getBacklogs();
+    this.setState({ backlogs });
+    console.log(backlogs);
   }
 
-  handleDelete = async user => {
+  handleDelete = async backlog => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -69,17 +74,17 @@ class BackLog extends React.Component {
     }).then(result => {
       if (result.value) {
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
-        const originalUsers = this.state.users;
-        const users = originalUsers.filter(u => u.id !== user.id);
-        this.setState({ users });
+        const originalBacklog = this.state.backlogs;
+        const backlogs = originalBacklog.filter(b => b.id !== backlog.id);
+        this.setState({ backlogs });
 
         try {
-          return deleteUser(user.id);
+          return deleteBacklog(backlog.id);
         } catch (ex) {
           if (ex.response && ex.response.status === 404)
-            toast.error("The user was deleted.");
+            toast.error("The Backlog was deleted.");
 
-          this.setState({ users: originalUsers });
+          this.setState({ backlogs: originalBacklog });
         }
       }
     });
@@ -103,23 +108,36 @@ class BackLog extends React.Component {
       currentPage,
       sortColumn,
       searchQuery,
-      users: allUsers
+      backlogs: allBacklogs
     } = this.state;
 
-    let filtered = allUsers;
+    let filtered = allBacklogs;
     if (searchQuery)
-      filtered = allUsers.filter(m =>
+      filtered = allBacklogs.filter(m =>
         m.email.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
-    const users = paginate(sorted, currentPage, pageSize);
+    const backlogs = paginate(sorted, currentPage, pageSize);
 
-    return { totalCount: filtered.length, data: users };
+    return { totalCount: filtered.length, data: backlogs };
   };
 
   render() {
+    const { length: count } = this.state.backlogs;
+    const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
+
+    if (count === 0)
+      return (
+        <div>
+          <div className="container">
+            <p>There are no backlogs in the database. Try again later</p>
+          </div>
+        </div>
+      );
+
+    const { totalCount, data: backlogs } = this.getPagedData();
     return (
       <Container fluid className="main-content-container px-4 pb-4">
         {/* Page Header */}
@@ -127,12 +145,54 @@ class BackLog extends React.Component {
           <PageTitle
             sm="4"
             title="BackLogs"
-            subtitle="Blog Posts"
+            subtitle="BackLogs Management"
             className="text-sm-left"
           />
         </Row>
-
         <Row>
+          <Col>
+            <Card small className="mb-4">
+              <CardHeader className="border-bottom">
+                <h6 className="m-0">Search Backlog</h6>
+                <SearchBox value={searchQuery} onChange={this.handleSearch} />
+              </CardHeader>
+              <CardBody className="p-0 pb-3">
+                <BacklogTable
+                  backlogs={backlogs}
+                  sortColumn={sortColumn}
+                  onLike={this.handleLike}
+                  onDelete={this.handleDelete}
+                  onSort={this.handleSort}
+                />
+                <div className="m-3">
+                  <Pagination
+                    itemsCount={totalCount}
+                    pageSize={pageSize}
+                    currentPage={currentPage}
+                    onPageChange={this.handlePageChange}
+                    className="pagination"
+                  />
+                </div>
+
+                {/* {user && ( */}
+              </CardBody>
+              <CardFooter>
+                <p>{totalCount} Backlogs</p>
+                <Link
+                  to="/backlogs/new"
+                  id="btn-newBacklog"
+                  className="btn btn-primary text-center"
+
+                  // style={{ marginBottom: 20 }}
+                >
+                  New Backlog
+                </Link>
+              </CardFooter>
+            </Card>
+          </Col>
+        </Row>
+
+        {/* <Row>
           <Col>
             <Card small className="mb-4">
               <CardHeader className="border-bottom">
@@ -162,7 +222,7 @@ class BackLog extends React.Component {
                         <td>
                           <Link
                             to={`/backlogsForm/${item.title}`}
-                            id="btn-newuser"
+                            id="btn-newBacklog"
                           >
                             <Button size="sm" theme="info">
                               edit
@@ -180,19 +240,14 @@ class BackLog extends React.Component {
                 </table>
               </CardBody>
               <div className="float-right">
-                <Link to="/backlogsForm/new" id="btn-newuser">
+                <Link to="/backlogsForm/new" id="btn-newBacklog">
                   <Button className="float-right mb-2 mr-1">Add new</Button>
                 </Link>
-                {/* <Button
-                      theme="danger"
-                      className=" float-right mb-2 mr-1 ml-2"
-                    >
-                      cancel
-                    </Button> */}
+
               </div>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
       </Container>
     );
   }

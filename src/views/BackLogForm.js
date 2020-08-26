@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
+
 import Joi from "joi-browser";
 import { Link } from "react-router-dom";
 import Forms from "../components/common/Form";
-import { getUser, saveUser } from "../services/Users/usersService";
-import Pagination from "../components/common/pagination";
-import { getUsers, deleteUser } from "../services/Users/usersService";
+import { saveBacklog, getBacklog } from "../services/Backlog/backlogsService";
 import { paginate } from "../utils/paginate";
+import Pagination from "../components/common/pagination";
 import _ from "lodash";
+import SearchBox from "../components/common/SearchBox";
+import PageTitle from "../components/common/PageTitle";
+import FeatureBacklogTable from "../components/backlogs/featureBacklogTable";
 import Swal from "sweetalert2";
-
+import { toast } from "react-toastify";
 import {
   Container,
   Card,
@@ -19,134 +22,57 @@ import {
   ListGroupItem,
   Row,
   Col,
-  Form,
-  FormGroup,
-  FormInput,
-  FormSelect,
-  FormTextarea,
+  // Form,
+  // FormGroup,
+  // FormInput,
+  // FormSelect,
+  // FormTextarea,
   Button
 } from "shards-react";
-import PageTitle from "../components/common/PageTitle";
-import FeatureBacklogTable from "../components/backlogs/featureBacklogTable";
 
 class BackLogForm extends Forms {
   state = {
-    data: { email: "", password: "", name: "", lastname: "", createdAt: "" },
-    errors: {},
+    data: {
+      title: "",
+      description: "",
+      project: "",
+      client: "",
+      features: [{}],
+      createdBy: "",
+      createdAt: "",
+      status: "",
+      operation: ""
+    },
     features: [],
+    errors: {},
     currentPage: 1,
     pageSize: 4,
     searchQuery: "",
-    sortColumn: { path: "email", order: "asc" },
+    sortColumn: { path: "title", order: "asc" },
     feature: {}
   };
 
-  features = [
-    {
-      id: 2,
-      name: "feature 2",
-      description: "Reportado",
-      startDate: "",
-      endDate: "",
-      developers: [
-        {
-          id: 1,
-          name: "pablito"
-        },
-        {
-          id: 2,
-          name: "juanito"
-        },
-        {
-          id: 1,
-          name: "pepito"
-        }
-      ],
-      issues: [
-        {
-          id: 1,
-          name: "issue 1",
-          project: "project 1",
-          status: 1,
-          user: "user 1",
-          description: "jdnafbajd"
-        },
-        {
-          id: 2,
-          name: "issue 2",
-          project: "project 2",
-          status: 0,
-          user: "user 2",
-          description: "adhhf hf h"
-        }
-      ]
-    },
-    {
-      id: 1,
-      name: "feature 1",
-      description: "Reportado",
-      startDate: "",
-      endDate: "",
-      developers: [
-        {
-          id: 1,
-          name: "pablito"
-        },
-        {
-          id: 2,
-          name: "juanito"
-        },
-        {
-          id: 1,
-          name: "pepito"
-        }
-      ],
-      issues: [
-        {
-          id: 1,
-          name: "issue 1",
-          project: "project 1",
-          status: 1,
-          user: "user 1",
-          description: "jdnafbajd"
-        },
-        {
-          id: 2,
-          name: "issue 2",
-          project: "project 2",
-          status: 0,
-          user: "user 2",
-          description: "adhhf hf h"
-        }
-      ]
-    }
-  ];
   schema = {
-    id: Joi.number(),
-    email: Joi.string()
-      .required()
-      .email()
-      .label("Email"),
-    password: Joi.string()
-      .required()
-      .min(1)
-      .label("Password"),
-    name: Joi.string()
-      .required()
-      .label("Name"),
-    lastname: Joi.string()
-      .required()
-      .label("Lastname"),
-    createdAt: ""
+    title: Joi.string().required(),
+    project: Joi.string().required(),
+    client: Joi.string().required(),
+    createdBy: Joi.string().required(),
+    description: Joi.string().required(),
+    status: Joi.number().required(),
+    createdAt: "",
+    features: [],
+    operation: ""
   };
 
-  async populateUser() {
+  async populateBacklog() {
     try {
-      const userId = this.props.match.params.id;
-      if (userId === "new") return;
+      const backlogId = this.props.match.params.id;
+      if (backlogId === "new") return;
 
-      const { data: user } = await getUser(userId);
-      this.setState({ data: this.mapToViewModel(user) });
+      const { data: backlog } = await getBacklog(backlogId);
+      this.setState({ data: this.mapToViewModel(backlog) });
+      console.log(backlog);
+      this.setState({ features: backlog.features });
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
         this.props.history.replace("/not-found");
@@ -154,54 +80,32 @@ class BackLogForm extends Forms {
   }
 
   async componentDidMount() {
-    //  await this.populateUser();
-    //const { data: users } = await getUsers();
-    const features = this.features;
-    this.setState({ features });
+    await this.populateBacklog();
+    // const features = this.features;
+    // this.setState({ features });
   }
 
-  mapToViewModel(user) {
+  mapToViewModel(backlog) {
     return {
-      id: user.id,
-      name: user.name,
-      lastname: user.lastname,
-      email: user.email,
-      password: user.password
+      id: backlog.id,
+      title: backlog.title,
+      project: backlog.project,
+      description: backlog.description,
+      client: backlog.client,
+      features: backlog.features,
+      createdBy: backlog.createdBy,
+      createdAt: backlog.createdAt,
+      status: backlog.status,
+      operation: backlog.operation
     };
   }
 
   doSubmit = async () => {
-    await saveUser(this.state.data);
+    await saveBacklog(this.state.data);
 
-    this.props.history.push("/users");
+    this.props.history.push("/backlogs");
   };
-  // handleDelete = async user => {
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!"
-  //   }).then(result => {
-  //     if (result.value) {
-  //       Swal.fire("Deleted!", "Your file has been deleted.", "success");
-  //       const originalUsers = this.state.users;
-  //       const users = originalUsers.filter(u => u.id !== user.id);
-  //       this.setState({ users });
-
-  //       try {
-  //         return deleteUser(user.id);
-  //       } catch (ex) {
-  //         if (ex.response && ex.response.status === 404)
-  //           toast.error("The user was deleted.");
-
-  //         this.setState({ users: originalUsers });
-  //       }
-  //     }
-  //   });
-  // };
+  //
 
   handlePageChange = page => {
     this.setState({ currentPage: page });
@@ -221,12 +125,12 @@ class BackLogForm extends Forms {
       currentPage,
       sortColumn,
       searchQuery,
-      features: allUsers
+      features: allFeatures
     } = this.state;
 
-    let filtered = allUsers;
+    let filtered = allFeatures;
     if (searchQuery)
-      filtered = allUsers.filter(m =>
+      filtered = allFeatures.filter(m =>
         m.email.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
 
@@ -238,8 +142,19 @@ class BackLogForm extends Forms {
   };
 
   render() {
+    const { length: count } = this.state.features;
+    const { pageSize, currentPage, sortColumn } = this.state;
+
+    // if (count === 0)
+    //   return (
+    //     <div>
+    //       <div className="container">
+    //         <p>There are no backlogs in the database. Try again later</p>
+    //       </div>
+    //     </div>
+    //   );
+
     const { totalCount, data: features } = this.getPagedData();
-    const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
 
     return (
       <Container fluid className="main-content-container px-4">
@@ -247,8 +162,8 @@ class BackLogForm extends Forms {
         <Row noGutters className="page-header py-4">
           <PageTitle
             sm="4"
-            title="Edit"
-            subtitle="User Management"
+            title=" Edit Backlog"
+            subtitle="Backlogs Management"
             className="text-sm-left"
           />
         </Row>
@@ -257,7 +172,7 @@ class BackLogForm extends Forms {
           <Col>
             <Card small className="mb-4">
               <CardHeader className="border-bottom">
-                <h6 className="m-0">Create User</h6>
+                <h6 className="m-0">Edit Backlog</h6>
               </CardHeader>
               <ListGroup flush>
                 <ListGroupItem className="p-3">
@@ -266,23 +181,19 @@ class BackLogForm extends Forms {
                       <form onSubmit={this.handleSubmit}>
                         <Row>
                           <Col lg="6" md="12" className="form-group">
-                            <FormGroup>
-                              <label htmlFor="">Title</label>
-                              {this.renderInput("title", "Title")}
-                            </FormGroup>
-                            <FormGroup>
-                              <label htmlFor="">Description</label>
-                              {this.renderTextarea("name", "Name")}
-                            </FormGroup>
+                            <label htmlFor="">Title</label>
+                            {this.renderInput("title", "Title")}
 
-                            <FormGroup>
-                              <label htmlFor="">Project</label>
-                              {this.renderInput("", "lastname")}
-                            </FormGroup>
-                            <FormGroup>
-                              <label htmlFor="">Client</label>
-                              {this.renderInput("client", "Client")}
-                            </FormGroup>
+                            <label htmlFor="">Description</label>
+                            {this.renderTextarea("description", "Description")}
+
+                            <label htmlFor="">Project</label>
+                            {this.renderInput("project", "Project")}
+
+                            <label htmlFor="">Client</label>
+                            {this.renderInput("client", "Client")}
+                            <label htmlFor="">status</label>
+                            {this.renderInput("status", "status")}
                           </Col>
                           <Col lg="6" md="12">
                             <Card small className="mb-2 mt-4 mr-4">
@@ -291,7 +202,7 @@ class BackLogForm extends Forms {
                               </CardHeader>
                               <CardBody className="p-0 pb-3">
                                 <FeatureBacklogTable
-                                  users={features}
+                                  features={features}
                                   sortColumn={sortColumn}
                                   onLike={this.handleLike}
                                   onDelete={this.handleDelete}
@@ -306,7 +217,10 @@ class BackLogForm extends Forms {
                                     className="pagination"
                                   />
                                 </div>
-                                <Link to={`/featuresForm/new`} id="btn-newuser">
+                                <Link
+                                  to={`/featuresForm/new`}
+                                  id="btn-newfeature"
+                                >
                                   <Button
                                     className="float-right rounded-circle mr-2"
                                     size="sm"
@@ -319,14 +233,14 @@ class BackLogForm extends Forms {
                             </Card>
                           </Col>
                         </Row>
-                        <Button
+                        {/* <Button
                           theme="info"
                           className="float-right mt-2"
                           type="submit"
                         >
                           Save
-                        </Button>
-                        <Link to={`/backlogs`} id="btn-newuser">
+                        </Button> */}
+                        <Link to={`/backlogs`} id="btn-newfeature">
                           <Button
                             theme="secondary"
                             className="float-right mt-2 mr-2"
@@ -335,6 +249,7 @@ class BackLogForm extends Forms {
                             Cancel
                           </Button>
                         </Link>
+                        <CardFooter>{this.renderButton("save")}</CardFooter>
                       </form>
                     </Col>
                   </Row>

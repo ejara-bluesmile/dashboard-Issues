@@ -28,12 +28,12 @@ class DevelopersFeatureTable extends Component {
   // }
 
   render() {
-    const { users, onSort, sortColumn } = this.props;
+    const { features, onSort, sortColumn } = this.props;
 
     return (
       <Table
         columns={this.columns}
-        data={users}
+        data={features}
         sortColumn={sortColumn}
         onSort={onSort}
       />

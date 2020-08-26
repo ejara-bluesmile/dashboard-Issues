@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 import iconBlue from "../images/bluesmile.png";
 
 import { Container, Row, Col, Card, CardHeader, CardBody } from "shards-react";
-import PageTitle from "../components/common/PageTitle";
+// import PageTitle from "../components/common/PageTitle";
 
 class LoginForm extends Form {
   state = {
