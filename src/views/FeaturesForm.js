@@ -37,7 +37,18 @@ import IssuesFeatureTable from "../components/features/IssuesFeatureTable";
 
 class FeaturesForm extends Forms {
   state = {
-    data: { email: "", password: "", name: "", lastname: "", createdAt: "" },
+    data: {
+      name: "",
+      description: "",
+      startDate: "",
+      endDate: "",
+      issues: [{}],
+      idBacklog: "",
+      createdBy: "",
+      createdBy: "",
+      status: "",
+      operation: ""
+    },
     errors: {},
     users: [],
     currentPage: 1,

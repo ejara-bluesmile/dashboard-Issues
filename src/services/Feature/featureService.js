@@ -3,25 +3,25 @@ import http from "../httpService";
 import Swal from "sweetalert2";
 
 const apiEndpoint =
-  "http://cruduserlogin-crud-user.apps.na311.openshift.opentlc.com/api/user";
+  "http://sprintsapp-bluesprint.apps.na311.openshift.opentlc.com/api/feature";
 
-function userUrl(id) {
+function featureUrl(id) {
   return `${apiEndpoint}/${id}`;
 }
 
-export function getUsers() {
-  return http.get(apiEndpoint, {
+export function getFeatures() {
+  return http.get(`${apiEndpoint}s`, {
     headers: { "x-auth-token": localStorage.getItem("x-auth-token") }
   });
 }
 
-export function getUser(userId) {
-  return http.get(userUrl(userId), {
+export function getFeature(featureId) {
+  return http.get(featureUrl(featureId), {
     headers: { "x-auth-token": localStorage.getItem("x-auth-token") }
   });
 }
 
-export function saveUser(user) {
+export function saveFeature(feature) {
   Swal.fire({
     position: "center",
     icon: "success",
@@ -29,21 +29,21 @@ export function saveUser(user) {
     showConfirmButton: false,
     timer: 1500
   });
-  if (user.id) {
-    const body = { ...user };
+  if (feature.id) {
+    const body = { ...feature };
     delete body.id;
-    return http.put(userUrl(user.id), body, {
+    return http.put(featureUrl(feature.id), body, {
       headers: { "x-auth-token": localStorage.getItem("x-auth-token") }
     });
   }
 
-  return http.post(apiEndpoint, user, {
+  return http.post(apiEndpoint, feature, {
     headers: { "x-auth-token": localStorage.getItem("x-auth-token") }
   });
 }
 
-export function deleteUser(userId) {
-  return http.delete(userUrl(userId), {
-    headers: { "x-auth-token": localStorage.getItem("x-auth-token") }
-  });
-}
+export function deleteFeature(featureId) {
+         return http.delete(featureUrl(featureId), {
+           headers: { "x-auth-token": localStorage.getItem("x-auth-token") }
+         });
+       }

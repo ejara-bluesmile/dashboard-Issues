@@ -11,7 +11,7 @@ class featureBacklogTable extends Component {
       label: "Edit",
       key: "edit",
       content: feature => (
-        <Link to={`/featuresForm/${feature.id}`}>
+        <Link to={`/featuresForm/${feature.idBacklog}/${feature.id}`}>
           <button className="btn btn-info btn-sm">Edit</button>
         </Link>
       )
