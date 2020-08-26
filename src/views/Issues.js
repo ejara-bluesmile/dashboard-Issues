@@ -14,6 +14,11 @@ import { toast } from "react-toastify";
 import UsersTable from "../components/users/userTable";
 import Pagination from "../components/common/pagination";
 import { getUsers, deleteUser } from "../services/Users/usersService";
+import {
+  getIssues,
+  deleteIssues,
+  saveIssues
+} from "../services/Issues/issuesService";
 import { paginate } from "../utils/paginate";
 import _ from "lodash";
 import SearchBox from "../components/common/SearchBox";
@@ -27,37 +32,38 @@ import Swal from "sweetalert2";
 class Issues extends React.Component {
   states = [
     {
-      title: 0,
-      project: "Reportado"
+      id: 0,
+      name: "Reportado"
     },
     {
-      title: 1,
-      project: "En progreso"
+      id: 1,
+      name: "En progreso"
     },
     {
-      title: 2,
-      project: "Resuelto"
+      id: 2,
+      name: "Resuelto"
     },
     {
-      title: 3,
-      project: "Eliminado"
+      id: 3,
+      name: "Eliminado"
     }
   ];
   state = {
-    users: [],
+    issues: [],
     currentPage: 1,
     pageSize: 4,
     searchQuery: "",
-    sortColumn: { path: "email", order: "asc" },
+    sortColumn: { path: "title", order: "asc" },
     user: {}
   };
 
   async componentDidMount() {
-    const { data: users } = await getUsers();
-    this.setState({ users });
+    const { data: issues } = await getIssues();
+    console.log("por aquí ", issues);
+    this.setState({ issues });
   }
 
-  handleDelete = async user => {
+  handleDelete = async issue => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -69,17 +75,17 @@ class Issues extends React.Component {
     }).then(result => {
       if (result.value) {
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
-        const originalUsers = this.state.users;
-        const users = originalUsers.filter(u => u.id !== user.id);
-        this.setState({ users });
+        const originalUsers = this.state.issues;
+        const issues = originalUsers.filter(u => u.id !== issue.id);
+        this.setState({ issues });
 
         try {
-          return deleteUser(user.id);
+          return deleteIssues(issue.id);
         } catch (ex) {
           if (ex.response && ex.response.status === 404)
-            toast.error("The user was deleted.");
+            toast.error("The issue was deleted.");
 
-          this.setState({ users: originalUsers });
+          this.setState({ issues: originalUsers });
         }
       }
     });
@@ -103,7 +109,7 @@ class Issues extends React.Component {
       currentPage,
       sortColumn,
       searchQuery,
-      users: allUsers
+      issues: allUsers
     } = this.state;
 
     let filtered = allUsers;
@@ -114,12 +120,28 @@ class Issues extends React.Component {
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
-    const users = paginate(sorted, currentPage, pageSize);
+    const issues = paginate(sorted, currentPage, pageSize);
 
-    return { totalCount: filtered.length, data: users };
+    return { totalCount: filtered.length, data: issues };
   };
 
   render() {
+    const { length: count } = this.state.issues;
+    // const { user } = this.props;
+
+    if (count === 0)
+      return (
+        <div>
+          <div className="container">
+            <p>There are no users in the database. Try again later</p>
+          </div>
+          <Link to="/issuesForm/new" id="btn-newuser">
+            <Button className="float-right mb-2 mr-1">Add new</Button>
+          </Link>
+        </div>
+      );
+    const { totalCount, data: issues } = this.getPagedData();
+
     return (
       <Container fluid className="main-content-container px-4 pb-4">
         {/* Page Header */}
@@ -148,29 +170,33 @@ class Issues extends React.Component {
                       <th scope="col" className="border-0">
                         Project
                       </th>
+                      <th scope="col" className="border-0">
+                        State
+                      </th>
                       <th scope="col" className="border-0" />
                       <th scope="col" className="border-0" />
                     </tr>
                   </thead>
                   <tbody>
-                    {console.log(this.states)}
-                    {this.states.map(item => (
+                    {console.log("Issues ", this.state)}
+                    {issues.map(item => (
                       <tr key={item.id}>
-                        <td key={item.id}>{item.title}</td>
-                        <td key={item.id}>{item.project}</td>
-
+                        <td>{item.title}</td>
+                        <td>{item.project}</td>
+                        <td>{this.states[item.estado].name}</td>
                         <td>
-                          <Link
-                            to={`/backlogsForm/${item.title}`}
-                            id="btn-newuser"
-                          >
+                          <Link to={`/issuesForm/${item.id}`} id="btn-newuser">
                             <Button size="sm" theme="info">
                               edit
                             </Button>
                           </Link>
                         </td>
                         <td>
-                          <Button size="sm" theme="warning">
+                          <Button
+                            onClick={() => this.handleDelete(item)}
+                            size="sm"
+                            theme="warning"
+                          >
                             delete
                           </Button>
                         </td>
@@ -180,7 +206,7 @@ class Issues extends React.Component {
                 </table>
               </CardBody>
               <div className="float-right">
-                <Link to="/backlogsForm/new" id="btn-newuser">
+                <Link to="/issuesForm/new" id="btn-newuser">
                   <Button className="float-right mb-2 mr-1">Add new</Button>
                 </Link>
                 {/* <Button
