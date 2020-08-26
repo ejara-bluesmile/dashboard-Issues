@@ -37,11 +37,11 @@ class BackLogForm extends Forms {
       description: "",
       project: "",
       client: "",
-      features: [{}],
+      features: [],
       createdBy: "",
       createdAt: "",
-      status: "",
-      operation: ""
+      status: 0,
+      operation: 0
     },
     features: [],
     errors: {},
@@ -53,15 +53,16 @@ class BackLogForm extends Forms {
   };
 
   schema = {
+    id: Joi.number(),
     title: Joi.string().required(),
     project: Joi.string().required(),
     client: Joi.string().required(),
     createdBy: Joi.string().required(),
     description: Joi.string().required(),
-    status: Joi.number().required(),
+    status: Joi.number(),
     createdAt: "",
-    features: [],
-    operation: ""
+    features: Joi.array().items(),
+    operation: Joi.number()
   };
 
   async populateBacklog() {
@@ -101,6 +102,8 @@ class BackLogForm extends Forms {
   }
 
   doSubmit = async () => {
+    console.log("state", this.state.data);
+
     await saveBacklog(this.state.data);
 
     this.props.history.push("/backlogs");
@@ -144,7 +147,9 @@ class BackLogForm extends Forms {
   render() {
     const { length: count } = this.state.features;
     const { pageSize, currentPage, sortColumn } = this.state;
-
+    if (count === 0) {
+      // return this.state.features[0];
+    }
     // if (count === 0)
     //   return (
     //     <div>
@@ -183,18 +188,24 @@ class BackLogForm extends Forms {
                           <Col lg="6" md="12" className="form-group">
                             <label htmlFor="">Title</label>
                             {this.renderInput("title", "Title")}
-
                             <label htmlFor="">Description</label>
                             {this.renderTextarea("description", "Description")}
-
                             <label htmlFor="">Project</label>
                             {this.renderInput("project", "Project")}
-
                             <label htmlFor="">Client</label>
                             {this.renderInput("client", "Client")}
                             <label htmlFor="">status</label>
                             {this.renderInput("status", "status")}
+                            <label htmlFor="">createdBy</label>
+                            {this.renderInput("createdBy", "createdBy")}
+                            <label htmlFor="">Operation</label>
+                            {this.renderInput("operation", "operation")}
+                            {/* {this.renderInput("features", "features")} */}
                           </Col>
+                        </Row>
+
+                        <CardFooter>{this.renderButton("save")}</CardFooter>
+                        <Col lg="6" md="12">
                           <Col lg="6" md="12">
                             <Card small className="mb-2 mt-4 mr-4">
                               <CardHeader className="border-bottom">
@@ -232,24 +243,23 @@ class BackLogForm extends Forms {
                               </CardBody>
                             </Card>
                           </Col>
-                        </Row>
-                        {/* <Button
+                          {/* <Button
                           theme="info"
                           className="float-right mt-2"
                           type="submit"
                         >
                           Save
                         </Button> */}
-                        <Link to={`/backlogs`} id="btn-newfeature">
-                          <Button
-                            theme="secondary"
-                            className="float-right mt-2 mr-2"
-                            type="submit"
-                          >
-                            Cancel
-                          </Button>
-                        </Link>
-                        <CardFooter>{this.renderButton("save")}</CardFooter>
+                          <Link to={`/backlogs`} id="btn-newfeature">
+                            <Button
+                              theme="secondary"
+                              className="float-right mt-2 mr-2"
+                              type="submit"
+                            >
+                              Cancel
+                            </Button>
+                          </Link>
+                        </Col>
                       </form>
                     </Col>
                   </Row>
