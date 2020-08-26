@@ -124,7 +124,7 @@ export default [
     component: Features
   },
   {
-    path: "/featuresForm/:id",
+    path: "/featuresForm/:backlogId/:featureId",
     exact: true,
     layout: DefaultLayout,
     component: FeaturesForm

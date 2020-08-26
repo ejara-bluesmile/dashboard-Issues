@@ -4,6 +4,11 @@ import Forms from "../components/common/Form";
 import { Link } from "react-router-dom";
 
 import { getUser, saveUser } from "../services/Users/usersService";
+import {
+  getIssue,
+  deleteIssues,
+  saveIssues
+} from "../services/Issues/issuesService";
 
 import {
   Container,
@@ -26,57 +31,58 @@ import PageTitle from "../components/common/PageTitle";
 
 class IssuesForm extends Forms {
   state = {
-    data: { email: "", password: "", name: "", lastname: "", createdAt: "" },
+    data: {
+      title: "",
+      description: "",
+      email: "",
+      estado: "",
+      project: ""
+    },
     errors: {}
   };
   states = [
     {
+      id: 0,
+      name: "Reportado"
+    },
+    {
       id: 1,
-      title: 0,
-      project: "Reportado"
+      name: "En progreso"
     },
     {
       id: 2,
-      title: 1,
-      project: "En progreso"
+      name: "Resuelto"
     },
     {
       id: 3,
-      title: 2,
-      project: "Resuelto"
-    },
-    {
-      id: 4,
-      title: 3,
-      project: "Eliminado"
+      name: "Eliminado"
     }
   ];
   schema = {
     id: Joi.number(),
+    title: Joi.string()
+      .required()
+      .label("Title"),
+    project: Joi.string()
+      .required()
+      .label("Project"),
     email: Joi.string()
       .required()
-      .email()
-      .label("Email"),
-    password: Joi.string()
+      .label("User"),
+    description: Joi.string()
       .required()
-      .min(1)
-      .label("Password"),
-    name: Joi.string()
-      .required()
-      .label("Name"),
-    lastname: Joi.string()
-      .required()
-      .label("Lastname"),
-    createdAt: ""
+      .label("Description"),
+    estado: Joi.label("Status")
   };
 
   async populateUser() {
     try {
-      const userId = this.props.match.params.id;
-      if (userId === "new") return;
+      const issueId = this.props.match.params.id;
+      if (issueId === "new") return;
 
-      const { data: user } = await getUser(userId);
-      this.setState({ data: this.mapToViewModel(user) });
+      const { data: issue } = await getIssue(issueId);
+      this.setState({ data: this.mapToViewModel(issue) });
+      console.log("State issues form: ", this.state);
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
         this.props.history.replace("/not-found");
@@ -87,20 +93,22 @@ class IssuesForm extends Forms {
     await this.populateUser();
   }
 
-  mapToViewModel(user) {
+  mapToViewModel(issue) {
     return {
-      id: user.id,
-      name: user.name,
-      lastname: user.lastname,
-      email: user.email,
-      password: user.password
+      id: issue.id,
+      title: issue.title,
+      description: issue.description,
+      email: issue.email,
+      estado: issue.estado,
+      project: issue.project
     };
   }
 
   doSubmit = async () => {
-    await saveUser(this.state.data);
-
-    this.props.history.push("/users");
+    console.log("doSubmit",this.state.data )
+    await saveIssues(this.state.data);
+    
+    this.props.history.push("/issues");
   };
 
   render() {
@@ -126,46 +134,41 @@ class IssuesForm extends Forms {
                 <ListGroupItem className="p-3">
                   <Row>
                     <Col>
-                      <Form>
-                        <form onSubmit={this.handleSubmit}>
-                          <Row>
-                            <Col md="6" className="form-group">
-                              <label for="">Name</label>
-                              {this.renderInput("name", "Name")}
-                            </Col>
-                            <Col md="6">
-                              <label for="">Description</label>
-                              {this.renderTextarea("", "Description")}
-                            </Col>
+                      <form onSubmit={this.handleSubmit}>
+                        <Row>
+                          <Col md="6" className="form-group">
+                            <label htmlFor="title">Name</label>
+                            {this.renderInput("title", "Name")}
+                          </Col>
+                          <Col md="6">
+                            <label htmlFor="description">Description</label>
+                            {this.renderTextarea("description", "Description")}
+                          </Col>
 
-                            <Col md="6" className="form-group">
-                              {this.renderSelect(
-                                "estado",
-                                "Status",
-                                this.states
-                              )}
-                            </Col>
-                          </Row>
-                          <Link to={`/featuresForm/rayos`} id="btn-newuser">
-                            <Button
-                              theme="info"
-                              className="float-right mt-2"
-                              type="submit"
-                            >
-                              Save
-                            </Button>
-                          </Link>
-                          <Link to={`/featuresForm/rayos`} id="btn-newuser">
-                            <Button
-                              theme="secondary"
-                              className="float-right mt-2 mr-2"
-                              type="submit"
-                            >
-                              Cancel
-                            </Button>
-                          </Link>
-                        </form>
-                      </Form>
+                          <Col md="6" className="form-group">
+                          <label htmlFor="project">Project</label>
+                            {this.renderInput("project", "Project")}
+                          </Col>
+                          <Col md="6" className="form-group">
+                          <label htmlFor="user">User</label>
+                            {this.renderInput("email", "User")}
+                          </Col>
+
+                          <Col md="6" className="form-group">
+                            {this.renderSelect("estado", "Status", this.states)}
+                          </Col>
+                        </Row>
+                        {this.renderButton("Save")}
+                        <Link to={`/featuresForm/rayos`} id="btn-newuser">
+                          <Button
+                            theme="secondary"
+                            className="float-right mt-2 mr-2"
+                            type="submit"
+                          >
+                            Cancel
+                          </Button>
+                        </Link>
+                      </form>
                     </Col>
                   </Row>
                 </ListGroupItem>

@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import UsersTable from "../components/users/userTable";
 import Pagination from "../components/common/pagination";
-import { getUsers, deleteUser } from "../services/Users/usersService";
+import { getFeatures } from "../services/Feature/featureService";
 import { paginate } from "../utils/paginate";
 import _ from "lodash";
 import SearchBox from "../components/common/SearchBox";
@@ -44,7 +44,7 @@ class Features extends React.Component {
     }
   ];
   state = {
-    users: [],
+    features: [],
     currentPage: 1,
     pageSize: 4,
     searchQuery: "",
@@ -53,37 +53,38 @@ class Features extends React.Component {
   };
 
   async componentDidMount() {
-    const { data: users } = await getUsers();
-    this.setState({ users });
+    const { data: features } = await getFeatures();
+    console.log("features aquí", features)
+    this.setState({ features });
   }
 
-  handleDelete = async user => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
-    }).then(result => {
-      if (result.value) {
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
-        const originalUsers = this.state.users;
-        const users = originalUsers.filter(u => u.id !== user.id);
-        this.setState({ users });
+  // handleDelete = async user => {
+  //   Swal.fire({
+  //     title: "Are you sure?",
+  //     text: "You won't be able to revert this!",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     cancelButtonColor: "#d33",
+  //     confirmButtonText: "Yes, delete it!"
+  //   }).then(result => {
+  //     if (result.value) {
+  //       Swal.fire("Deleted!", "Your file has been deleted.", "success");
+  //       const originalUsers = this.state.users;
+  //       const users = originalUsers.filter(u => u.id !== user.id);
+  //       this.setState({ users });
 
-        try {
-          return deleteUser(user.id);
-        } catch (ex) {
-          if (ex.response && ex.response.status === 404)
-            toast.error("The user was deleted.");
+  //       try {
+  //         return deleteUser(user.id);
+  //       } catch (ex) {
+  //         if (ex.response && ex.response.status === 404)
+  //           toast.error("The user was deleted.");
 
-          this.setState({ users: originalUsers });
-        }
-      }
-    });
-  };
+  //         this.setState({ users: originalUsers });
+  //       }
+  //     }
+  //   });
+  // };
 
   handlePageChange = page => {
     this.setState({ currentPage: page });
@@ -103,23 +104,29 @@ class Features extends React.Component {
       currentPage,
       sortColumn,
       searchQuery,
-      users: allUsers
+      features: allFeatures
     } = this.state;
 
-    let filtered = allUsers;
+    let filtered = allFeatures;
     if (searchQuery)
-      filtered = allUsers.filter(m =>
+      filtered = allFeatures.filter(m =>
         m.email.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
-    const users = paginate(sorted, currentPage, pageSize);
+    const features = paginate(sorted, currentPage, pageSize);
 
-    return { totalCount: filtered.length, data: users };
+    return { totalCount: filtered.length, data: features };
   };
 
   render() {
+
+    const { length: count } = this.state.features;
+    const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
+
+    const { totalCount, data: features } = this.getPagedData();
+
     return (
       <Container fluid className="main-content-container px-4 pb-4">
         {/* Page Header */}
@@ -153,15 +160,15 @@ class Features extends React.Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {console.log(this.states)}
-                    {this.states.map(item => (
+                    {}
+                    {features.map(item => (
                       <tr key={item.id}>
-                        <td key={item.id}>{item.title}</td>
-                        <td key={item.id}>{item.project}</td>
+                        <td key={item.id}>{item.name}</td>
+                        <td key={item.id}>{item.description}</td>
 
                         <td>
                           <Link
-                            to={`/backlogsForm/${item.title}`}
+                            to={`/backlogsForm/${item.id}`}
                             id="btn-newuser"
                           >
                             <Button size="sm" theme="info">
