@@ -6,19 +6,19 @@ import { getUser, saveUser } from "../services/Users/usersService";
 import {
   Container,
   Card,
-  CardBody,
+  // CardBody,
   CardHeader,
   CardFooter,
   ListGroup,
   ListGroupItem,
   Row,
   Col,
-  Form,
-  FormGroup,
-  FormInput,
-  FormSelect,
-  FormTextarea,
-  Button
+  Form
+  // FormGroup,
+  // FormInput,
+  // FormSelect,
+  // FormTextarea,
+  // Button
 } from "shards-react";
 import PageTitle from "../components/common/PageTitle";
 
@@ -129,13 +129,13 @@ class UserForm extends Forms {
                               )}
                             </Col>
                           </Row>
+                          <CardFooter> {this.renderButton("Save")}</CardFooter>
                         </form>
                       </Form>
                     </Col>
                   </Row>
                 </ListGroupItem>
               </ListGroup>
-              <CardFooter> {this.renderButton("Save")}</CardFooter>
             </Card>
           </Col>
         </Row>

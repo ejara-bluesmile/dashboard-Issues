@@ -80,59 +80,65 @@ export default [
     layout: DefaultLayout,
     component: UserProfileLite
   },
-  {
-    path: "/add-new-post",
-    layout: DefaultLayout,
-    component: AddNewPost
-  },
-  {
-    path: "/errors",
-    layout: DefaultLayout,
-    component: Errors
-  },
-  {
-    path: "/components-overview",
-    layout: DefaultLayout,
-    component: ComponentsOverview
-  },
-  {
-    path: "/tables",
-    layout: DefaultLayout,
-    component: Tables
-  },
-  {
-    path: "/blog-posts",
-    layout: DefaultLayout,
-    component: BlogPosts
-  },
+  // {
+  //   path: "/add-new-post",
+  //   layout: DefaultLayout,
+  //   component: AddNewPost
+  // },
+  // {
+  //   path: "/errors",
+  //   layout: DefaultLayout,
+  //   component: Errors
+  // },
+  // {
+  //   path: "/components-overview",
+  //   layout: DefaultLayout,
+  //   component: ComponentsOverview
+  // },
+  // {
+  //   path: "/tables",
+  //   layout: DefaultLayout,
+  //   component: Tables
+  // },
+  // {
+  //   path: "/blog-posts",
+  //   layout: DefaultLayout,
+  //   component: BlogPosts
+  // },
   {
     path: "/backLogs",
+    exact: true,
     layout: DefaultLayout,
     component: BackLog
   },
   {
     path: "/backlogs/:id",
+    exact: true,
     layout: DefaultLayout,
     component: BackLogForm
   },
   {
+    path: "/features",
+    exact: true,
+    layout: DefaultLayout,
+    component: Features
+  },
+  {
     path: "/featuresForm/:id",
+    exact: true,
     layout: DefaultLayout,
     component: FeaturesForm
   },
   {
     path: "/issuesForm/:id",
+    exact: true,
     layout: DefaultLayout,
     component: IssuesForm
   },
   {
     path: "/issues",
+    exact: true,
     layout: DefaultLayout,
     component: Issues
-  },
-  {
-    path: "/features",
-    layout: DefaultLayout,
-    component: Features
   }
 ];

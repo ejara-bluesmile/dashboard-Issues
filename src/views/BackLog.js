@@ -59,6 +59,7 @@ class BackLog extends React.Component {
   async componentDidMount() {
     const { data: backlogs } = await getBacklogs();
     this.setState({ backlogs });
+    console.log(backlogs);
   }
 
   handleDelete = async backlog => {
@@ -126,7 +127,6 @@ class BackLog extends React.Component {
   render() {
     const { length: count } = this.state.backlogs;
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
-    // const { user } = this.props;
 
     if (count === 0)
       return (
