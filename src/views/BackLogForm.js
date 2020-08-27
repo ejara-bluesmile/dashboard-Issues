@@ -200,12 +200,8 @@ class BackLogForm extends Forms {
                             {this.renderInput("createdBy", "createdBy")}
                             <label htmlFor="">Operation</label>
                             {this.renderInput("operation", "operation")}
-                            {/* {this.renderInput("features", "features")} */}
                           </Col>
-                        </Row>
 
-                        <CardFooter>{this.renderButton("save")}</CardFooter>
-                        <Col lg="6" md="12">
                           <Col lg="6" md="12">
                             <Card small className="mb-2 mt-4 mr-4">
                               <CardHeader className="border-bottom">
@@ -242,24 +238,29 @@ class BackLogForm extends Forms {
                                 </Link>
                               </CardBody>
                             </Card>
-                          </Col>
-                          {/* <Button
-                          theme="info"
-                          className="float-right mt-2"
-                          type="submit"
-                        >
-                          Save
-                        </Button> */}
-                          <Link to={`/backlogs`} id="btn-newfeature">
-                            <Button
-                              theme="secondary"
-                              className="float-right mt-2 mr-2"
+
+                            {/* <Button
+                              theme="info"
+                              className="float-right mt-2"
                               type="submit"
-                            >
-                              Cancel
-                            </Button>
-                          </Link>
-                        </Col>
+                              >
+                              Save
+                              </Button> */}
+                          </Col>
+
+                          <CardFooter className="text-align-center">
+                            <Link to={`/backlogs`} id="btn-newfeature">
+                              <Button
+                                theme="secondary"
+                                className="m-2"
+                                type="submit"
+                              >
+                                Cancel
+                              </Button>
+                            </Link>
+                            {this.renderButton("save")}
+                          </CardFooter>
+                        </Row>
                       </form>
                     </Col>
                   </Row>
