@@ -38,7 +38,7 @@ class featureBacklogTable extends Component {
 
   render() {
     const { features, onSort, sortColumn } = this.props;
-    console.log(features);
+    // console.log(features);
     return (
       <Table
         columns={this.columns}

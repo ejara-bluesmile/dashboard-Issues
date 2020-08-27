@@ -128,14 +128,14 @@ class BackLog extends React.Component {
     const { length: count } = this.state.backlogs;
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
 
-    if (count === 0)
-      return (
-        <div>
-          <div className="container">
-            <p>There are no backlogs in the database. Try again later</p>
-          </div>
-        </div>
-      );
+    // if (count === 0)
+    //   return (
+    //     <div>
+    //       <div className="container">
+    //         <p>There are no backlogs in the database. Try again later</p>
+    //       </div>
+    //     </div>
+    //   );
 
     const { totalCount, data: backlogs } = this.getPagedData();
     return (
